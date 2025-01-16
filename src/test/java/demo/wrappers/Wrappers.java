@@ -16,7 +16,39 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class Wrappers {
-    /*
-     * Write your selenium wrappers here
-     */
+    WebDriver driver;
+    WebDriverWait wait;
+
+    public  Wrappers(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    public WebElement findElement(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    public List<WebElement> findElements(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
+
+    public void clickElement(By locator) {
+        findElement(locator).click();
+    }
+
+    public void sendKeysToElement(By locator, String text) {
+        WebElement element = findElement(locator);
+        element.clear();
+        element.sendKeys(text);
+    }
+
+    public String getElementText(By locator) {
+        return findElement(locator).getText();
+    }
+
+    public void searchForItem(String product) {
+        By searchBoxLocator = By.xpath("//input[@name='q']");
+        sendKeysToElement(searchBoxLocator, product);
+        findElement(searchBoxLocator).submit();
+    }
 }
